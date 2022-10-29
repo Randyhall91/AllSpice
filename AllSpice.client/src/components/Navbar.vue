@@ -1,6 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
+  <nav class="navbar navbar-expand-lg navbar-dark px-3 d-flex justify-content-end">
+    <!-- <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
         <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
       </div>
@@ -23,10 +23,10 @@
             About
           </router-link>
         </li>
-      </ul>
-      <!-- LOGIN COMPONENT HERE -->
-      <Login />
-    </div>
+      </ul> -->
+    <!-- LOGIN COMPONENT HERE -->
+    <Login />
+    <!-- </div> -->
   </nav>
 </template>
 
@@ -60,5 +60,4 @@ a:hover {
     height: 64px;
   }
 }
-
 </style>
