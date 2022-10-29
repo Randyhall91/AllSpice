@@ -32,6 +32,15 @@ CREATE TABLE
         Foreign Key (recipeId) REFERENCES recipes(id)
     ) default charset utf8 COMMENT '';
 
+CREATE TABLE
+    IF NOT EXISTS favorites(
+        id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        accountId VARCHAR(255) NOT NULL,
+        recipeId INT NOT NULL,
+        Foreign Key (accountId) REFERENCES accounts(id),
+        Foreign Key (recipeId) REFERENCES recipes(id)
+    ) default charset utf8 COMMENT '';
+
 SELECT r.*, a.*
 FROM recipes r
     JOIN accounts a ON a.id = r.creatorId;
