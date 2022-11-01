@@ -28,7 +28,7 @@ import Pop from '../utils/Pop.js';
 import { computed } from '@vue/reactivity';
 import { AppState } from '../AppState.js';
 import { recipesService } from '../services/RecipesService.js'
-import { onMounted } from 'vue';
+import { onMounted, watchEffect } from 'vue';
 import RecipeCard from '../components/RecipeCard.vue';
 
 
@@ -36,7 +36,6 @@ export default {
   setup() {
     onMounted(() => {
       getAllRecipes();
-      getFavorites();
     })
     async function getAllRecipes() {
       try {
@@ -45,14 +44,17 @@ export default {
         Pop.error(error, '[GetallREcipies]')
       }
     }
-    async function getFavorites() {
-      try {
-        await recipesService.getFavorites();
-      }
-      catch (error) {
-        Pop.error('[getFavorites]', error)
-      }
-    }
+    watchEffect(() => {
+      AppState.favorites
+    })
+    // async function getFavorites() {
+    //   try {
+    //     await recipesService.getFavorites();
+    //   }
+    //   catch (error) {
+    //     Pop.error('[getFavorites]', error)
+    //   }
+    // }
     return {
       recipes: computed(() => AppState.recipes),
     };

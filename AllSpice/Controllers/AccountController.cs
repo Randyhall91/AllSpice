@@ -1,48 +1,49 @@
-namespace AllSpice.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class AccountController : ControllerBase
+namespace AllSpice.Controllers
 {
-  private readonly AccountService _accountService;
-  private readonly Auth0Provider _auth0Provider;
-  private readonly FavoritesService _fs;
-
-  public AccountController(AccountService accountService, Auth0Provider auth0Provider, FavoritesService fs)
+  [ApiController]
+  [Route("[controller]")]
+  public class AccountController : ControllerBase
   {
-    _accountService = accountService;
-    _auth0Provider = auth0Provider;
-    _fs = fs;
-  }
+    private readonly AccountService _accountService;
+    private readonly Auth0Provider _auth0Provider;
+    private readonly FavoritesService _fs;
 
-  [HttpGet]
-  [Authorize]
-  public async Task<ActionResult<Account>> Get()
-  {
-    try
+    public AccountController(AccountService accountService, Auth0Provider auth0Provider, FavoritesService fs)
     {
-      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-      return Ok(_accountService.GetOrCreateProfile(userInfo));
+      _accountService = accountService;
+      _auth0Provider = auth0Provider;
+      _fs = fs;
     }
-    catch (Exception e)
-    {
-      return BadRequest(e.Message);
-    }
-  }
 
-  [HttpGet("favorites")]
-  [Authorize]
-  public async Task<ActionResult<List<Favorite>>> GetFavorites()
-  {
-    try
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<Account>> Get()
     {
-      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-      List<Favorite> favorites = _fs.GetFavorites(userInfo);
-      return Ok(favorites);
+      try
+      {
+        Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+        return Ok(_accountService.GetOrCreateProfile(userInfo));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
     }
-    catch (Exception e)
+
+    [HttpGet("favorites")]
+    [Authorize]
+    public async Task<ActionResult<List<Favorite>>> GetFavorites()
     {
-      return BadRequest(e.Message);
+      try
+      {
+        Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+        List<FavoritedRecipe> favorites = _fs.GetFavorites(userInfo.Id);
+        return Ok(favorites);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
     }
   }
 }

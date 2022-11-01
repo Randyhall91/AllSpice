@@ -14,13 +14,17 @@ namespace AllSpice.Services
       return _repo.CreateFavorite(newFav);
     }
 
-    internal List<Favorite> GetFavorites(Account userInfo)
+    internal List<FavoritedRecipe> GetFavorites(string userId)
     {
-      return _repo.GetFavorites(userInfo);
+      return _repo.GetFavorites(userId);
     }
     internal Favorite GetFavoriteById(int favoriteId)
     {
       Favorite favorite = _repo.GetFavoriteById(favoriteId);
+      if (favorite == null)
+      {
+        throw new Exception("favorite not found");
+      }
       return favorite;
     }
 

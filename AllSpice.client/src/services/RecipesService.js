@@ -24,14 +24,17 @@ class RecipesService {
   async getFavorites() {
     const res = await api.get('/account/favorites/')
     console.log('favorites', res.data);
-    AppState.favorites = res.data.map(f => Favorite(f))
+    AppState.favorites = res.data
   }
-  async makeFavorite(id) {
-    const res = await api.post('/api/favorite/')
+  async makeFavorite(recipeId) {
+    const res = await api.post('/api/favorites/', { recipeId })
     console.log('favorite', res.data);
     AppState.favorites.push(res.data)
   }
-
+  async removeFavorite(favoriteId) {
+    const res = await api.delete('/api/favorites/' + favoriteId)
+    AppState.favorites = AppState.favorites.filter(f => f.id != favoriteId)
+  }
 
 }
 

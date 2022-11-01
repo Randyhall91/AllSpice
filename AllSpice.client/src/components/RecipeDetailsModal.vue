@@ -9,11 +9,11 @@
               <img :src="activeRecipe.img" class="img-fluid" alt="">
               <div class="text-light">
 
-                <div class="favorite px-2 rounded-bottom selectable">
-                  <i class="mdi mdi-heart-outline fs-1"></i>
-                </div>
-                <div class="favorite px-2 selectable" hidden>
+                <div v-if="favorite" class="favorite px-2 selectable" @click="removeFavorite">
                   <i class="mdi mdi-heart text-danger fs-1"></i>
+                </div>
+                <div v-else class="favorite px-2 rounded-bottom selectable" @click="makeFavorite">
+                  <i class="mdi mdi-heart-outline fs-1"></i>
                 </div>
               </div>
             </div>
@@ -39,11 +39,30 @@
 <script>
 import { computed } from '@vue/reactivity';
 import { AppState } from '../AppState.js';
+import { recipesService } from '../services/RecipesService.js';
+import Pop from '../utils/Pop.js';
 
 export default {
   setup() {
     return {
-      activeRecipe: computed(() => AppState.activeRecipe)
+      activeRecipe: computed(() => AppState.activeRecipe),
+      favorite: computed(() => AppState.favorites.find(f => f.id == AppState.activeRecipe.id)),
+      async makeFavorite() {
+        try {
+          await recipesService.makeFavorite(this.activeRecipe.id);
+        }
+        catch (error) {
+          Pop.error('[makeFavorite]', error)
+        }
+      },
+      async removeFavorite() {
+        try {
+          await recipesService.removeFavorite(this.favorite.favoriteId);
+        }
+        catch (error) {
+          Pop.error('[removeFavorite]', error)
+        }
+      }
 
     }
   }

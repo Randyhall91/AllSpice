@@ -18,22 +18,23 @@ namespace AllSpice.Repositories
       return newFav;
     }
 
-    internal List<Favorite> GetFavorites(Account userInfo)
+    internal List<FavoritedRecipe> GetFavorites(string userId)
     {
       string sql = @"
       SELECT 
-      f.*,
-      r.*
+      a.*,
+      r.*,
+      f.id AS favoriteId
       FROM favorites f
       JOIN recipes r ON r.id = f.recipeId
-      WHERE f.accountId = @id
+      JOIN accounts a ON a.id = r.creatorId
+      WHERE f.accountId = @userId
       ;";
-      return _db.Query<Favorite, Recipe, Favorite>(sql, (favorite, recipes) =>
+      return _db.Query<Account, FavoritedRecipe, FavoritedRecipe>(sql, (account, recipe) =>
       {
-        favorite.recipeId = recipes.id;
-        favorite.accountId = userInfo.Id;
-        return favorite;
-      }, userInfo).ToList();
+        recipe.Creator = account;
+        return recipe;
+      }, new { userId }).ToList();
     }
 
     internal void DeleteFavorite(int favoriteId)
