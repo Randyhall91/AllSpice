@@ -50,7 +50,7 @@ public class RecipesController : ControllerBase
   }
 
   [HttpGet("{recipeId}")]
-  [Authorize]
+
   public ActionResult<Recipe> GetRecipeById(int recipeId)
   {
     try
