@@ -21,6 +21,21 @@ class RecipesService {
     console.log('recipe', res.data);
     AppState.activeRecipe = new Recipe(res.data)
   }
+  async createRecipe(formData) {
+    const res = await api.post('/api/recipes/', formData)
+    console.log('createRecipe', res.data);
+    AppState.recipes.push(new Recipe(res.data))
+  }
+
+
+  async getIngredients(id) {
+    const res = await api.get('api/recipes/' + id + '/ingredients')
+    console.log('ingredients', res.data);
+    AppState.ingredients = res.data
+  }
+
+
+
   async getFavorites() {
     const res = await api.get('/account/favorites/')
     console.log('favorites', res.data);
@@ -33,7 +48,7 @@ class RecipesService {
   }
   async removeFavorite(favoriteId) {
     const res = await api.delete('/api/favorites/' + favoriteId)
-    AppState.favorites = AppState.favorites.filter(f => f.id != favoriteId)
+    AppState.favorites = AppState.favorites.filter(f => f.favoriteId != favoriteId)
   }
 
 }

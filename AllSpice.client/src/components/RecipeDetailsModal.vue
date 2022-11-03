@@ -23,6 +23,7 @@
               </div>
 
               {{ activeRecipe.instructions }}
+              {{ ingredients }}
             </div>
           </div>
         </div>
@@ -38,15 +39,21 @@
 
 <script>
 import { computed } from '@vue/reactivity';
+import { onMounted } from 'vue';
 import { AppState } from '../AppState.js';
 import { recipesService } from '../services/RecipesService.js';
 import Pop from '../utils/Pop.js';
 
 export default {
+
   setup() {
+
+
+    // function watch<AppState.favorites>(() => AppState.favorites.find(f => f.id == AppState.activeRecipe.id))
     return {
+      ingredients: computed(() => AppState.ingredients),
       activeRecipe: computed(() => AppState.activeRecipe),
-      favorite: computed(() => AppState.favorites.find(f => f.id == AppState.activeRecipe.id)),
+      favorite: computed(() => AppState.favorites.find(f => f.recipeId == AppState.activeRecipe.id)),
       async makeFavorite() {
         try {
           await recipesService.makeFavorite(this.activeRecipe.id);

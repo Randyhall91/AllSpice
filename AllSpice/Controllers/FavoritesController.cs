@@ -20,6 +20,12 @@ namespace AllSpice.Controllers
       try
       {
         Account userInfo = await _auth0provider.GetUserInfoAsync<Account>(HttpContext);
+        if (userInfo == null || userInfo.Id == null)
+        {
+          throw new Exception(
+          "Bad token"
+          );
+        }
         newFav.accountId = userInfo.Id;
         Favorite favorite = _fs.CreateFavorite(newFav);
         return Ok(newFav);
@@ -37,6 +43,12 @@ namespace AllSpice.Controllers
       try
       {
         Account userInfo = await _auth0provider.GetUserInfoAsync<Account>(HttpContext);
+        if (userInfo == null || userInfo.Id == null)
+        {
+          throw new Exception(
+          "Bad token"
+          );
+        }
         _fs.DeleteFavorite(userInfo, favoriteId);
         return Ok("Delete Successful");
       }

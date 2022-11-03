@@ -18,8 +18,11 @@
 
       </div>
     </div>
+    <div class="create">
+      <i class="mdi mdi-plus-circle fs-1 text-primary selectable" data-bs-toggle="modal"
+        data-bs-target="#createRecipe"></i>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -47,14 +50,6 @@ export default {
     watchEffect(() => {
       AppState.favorites
     })
-    // async function getFavorites() {
-    //   try {
-    //     await recipesService.getFavorites();
-    //   }
-    //   catch (error) {
-    //     Pop.error('[getFavorites]', error)
-    //   }
-    // }
     return {
       recipes: computed(() => AppState.recipes),
     };
@@ -76,5 +71,11 @@ export default {
 
 .opacity-75 {
   --bs-bg-opacity: .25;
+}
+
+.create {
+  position: fixed;
+  bottom: .5rem;
+  right: 1rem;
 }
 </style>

@@ -34,12 +34,13 @@ export default {
   },
   setup(props) {
     return {
-      favorites: computed(() => AppState.favorites.filter(f => f.id == props.recipe.id)),
+      favorites: computed(() => AppState.favorites.filter(f => f.recipeId == props.recipe.id)),
 
 
       async getRecipeById() {
         try {
           await recipesService.getRecipeById(props.recipe.id)
+          await recipesService.getIngredients(props.recipe.id)
         }
         catch (error) {
           Pop.error('[getRecipeById]', error)

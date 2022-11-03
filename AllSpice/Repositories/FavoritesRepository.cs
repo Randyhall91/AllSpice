@@ -12,6 +12,7 @@ namespace AllSpice.Repositories
       INSERT INTO favorites(accountId, recipeId)
       VALUES(@AccountId, @RecipeId);
       SELECT LAST_INSERT_ID()
+      
       ;";
       int favoriteId = _db.ExecuteScalar<int>(sql, newFav);
       newFav.id = favoriteId;
@@ -30,10 +31,11 @@ namespace AllSpice.Repositories
       JOIN accounts a ON a.id = r.creatorId
       WHERE f.accountId = @userId
       ;";
-      return _db.Query<Account, FavoritedRecipe, FavoritedRecipe>(sql, (account, recipe) =>
+      return _db.Query<Account, FavoritedRecipe, FavoritedRecipe>(sql, (account, Favrecipe) =>
       {
-        recipe.Creator = account;
-        return recipe;
+        Favrecipe.Creator = account;
+        Favrecipe.recipeId = Favrecipe.id;
+        return Favrecipe;
       }, new { userId }).ToList();
     }
 
